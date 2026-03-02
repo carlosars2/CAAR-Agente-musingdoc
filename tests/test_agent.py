@@ -33,19 +33,25 @@ class TestSystemPrompt:
         for agent in agents:
             assert agent in SYSTEM_PROMPT, f"Missing agent: {agent}"
 
-    def test_prompt_contains_pricing(self):
-        assert "R$497" in SYSTEM_PROMPT
-        assert "R$1.297" in SYSTEM_PROMPT
+    def test_prompt_contains_packages(self):
+        assert "Starter" in SYSTEM_PROMPT
+        assert "Pro" in SYSTEM_PROMPT
         assert "Enterprise" in SYSTEM_PROMPT
 
-    def test_prompt_contains_build_pricing(self):
-        assert "R$25.000" in SYSTEM_PROMPT
-        assert "R$180.000" in SYSTEM_PROMPT
+    def test_prompt_does_not_contain_prices(self):
+        assert "R$497" not in SYSTEM_PROMPT
+        assert "R$1.297" not in SYSTEM_PROMPT
+        assert "R$25.000" not in SYSTEM_PROMPT
+        assert "R$180.000" not in SYSTEM_PROMPT
+        assert "R$490" not in SYSTEM_PROMPT
+        assert "R$890" not in SYSTEM_PROMPT
+        assert "R$590" not in SYSTEM_PROMPT
 
-    def test_prompt_contains_cooperative_discounts(self):
-        assert "15%" in SYSTEM_PROMPT
-        assert "25%" in SYSTEM_PROMPT
-        assert "35%" in SYSTEM_PROMPT
+    def test_prompt_says_prices_are_personalized(self):
+        assert "personalizados" in SYSTEM_PROMPT or "personalizado" in SYSTEM_PROMPT
+
+    def test_prompt_contains_cooperative_model(self):
+        assert "cooperativa" in SYSTEM_PROMPT.lower()
 
     def test_prompt_contains_funnel_stages(self):
         assert "Etapa 1" in SYSTEM_PROMPT

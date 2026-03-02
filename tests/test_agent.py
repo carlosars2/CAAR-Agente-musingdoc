@@ -33,10 +33,16 @@ class TestSystemPrompt:
         for agent in agents:
             assert agent in SYSTEM_PROMPT, f"Missing agent: {agent}"
 
-    def test_prompt_contains_packages(self):
-        assert "Starter" in SYSTEM_PROMPT
-        assert "Pro" in SYSTEM_PROMPT
-        assert "Enterprise" in SYSTEM_PROMPT
+    def test_prompt_does_not_contain_packages(self):
+        # Packages were removed — agent should never mention them
+        lines = SYSTEM_PROMPT.split("\n")
+        for i, line in enumerate(lines):
+            # Allow the line that says "JAMAIS mencione nomes de pacotes"
+            if "JAMAIS" in line:
+                continue
+            assert "Starter" not in line, f"Found 'Starter' on line {i+1}"
+            assert "Enterprise" not in line or "Standard" in line or "Predictive" in line, \
+                f"Found 'Enterprise' as package on line {i+1}"
 
     def test_prompt_does_not_contain_prices(self):
         assert "R$497" not in SYSTEM_PROMPT
@@ -47,8 +53,8 @@ class TestSystemPrompt:
         assert "R$890" not in SYSTEM_PROMPT
         assert "R$590" not in SYSTEM_PROMPT
 
-    def test_prompt_says_prices_are_personalized(self):
-        assert "personalizados" in SYSTEM_PROMPT or "personalizado" in SYSTEM_PROMPT
+    def test_prompt_says_personalized(self):
+        assert "personalizada" in SYSTEM_PROMPT or "personalizado" in SYSTEM_PROMPT
 
     def test_prompt_contains_cooperative_model(self):
         assert "cooperativa" in SYSTEM_PROMPT.lower()
